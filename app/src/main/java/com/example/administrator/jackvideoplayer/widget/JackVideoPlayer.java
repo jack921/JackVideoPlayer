@@ -29,6 +29,7 @@ public class JackVideoPlayer extends FrameLayout implements IJackVideoPalyer,
         IMediaPlayer.OnPreparedListener, IMediaPlayer.OnVideoSizeChangedListener,
         IMediaPlayer.OnCompletionListener, IMediaPlayer.OnErrorListener,
         IMediaPlayer.OnInfoListener, IMediaPlayer.OnBufferingUpdateListener, TextureView.SurfaceTextureListener {
+    public final String TAG="jack";
 
     private FrameLayout mContainer;
     private IMediaPlayer mMediaPlayer;
@@ -161,12 +162,35 @@ public class JackVideoPlayer extends FrameLayout implements IJackVideoPalyer,
 
     @Override
     public void restart() {
-
+        if(mCurrentState==STATE_PAUSED){
+            mMediaPlayer.start();
+            mCurrentState=STATE_PLAYING;
+            jackVideoController.udpateControllState(mCurrentState);
+        }else if(mCurrentState==STATE_BUFFERING_PAUSED){
+            mMediaPlayer.start();
+            mCurrentState=STATE_BUFFERING_PLAYING;
+            jackVideoController.udpateControllState(mCurrentState);
+        }else if(mCurrentState==STATE_COMPLETED||mCurrentState==STATE_ERROR){
+            mMediaPlayer.reset();
+            initTexttureView();
+            addTextureView();
+        }else{
+            Log.e(TAG,"retart error");
+        }
     }
 
     @Override
     public void pause() {
-
+        if(mCurrentState==STATE_PLAYING){
+            mMediaPlayer.pause();
+            mCurrentState=STATE_PAUSED;
+            jackVideoController.udpateControllState(mCurrentState);
+        }
+        if(mCurrentState==STATE_BUFFERING_PLAYING){
+            mMediaPlayer.pause();
+            mCurrentState=STATE_BUFFERING_PAUSED;
+            jackVideoController.udpateControllState(mCurrentState);
+        }
     }
 
     @Override

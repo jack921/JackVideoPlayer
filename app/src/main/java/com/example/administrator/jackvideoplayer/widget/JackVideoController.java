@@ -8,20 +8,13 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-
-
 import com.example.administrator.jackvideoplayer.R;
-
-import java.io.PipedOutputStream;
-
-import tv.danmaku.ijk.media.player.IMediaPlayer;
 
 /**
  * Created by Administrator on 2017/11/7.
  */
 
 public class JackVideoController extends AJackVideoPlayer implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
-
     private Context context;
     private View mRoot;
 
@@ -79,7 +72,8 @@ public class JackVideoController extends AJackVideoPlayer implements View.OnClic
     public void onClick(View v) {
         switch(v.getId()){
             case R.id.play_btn:
-
+                playStatus=!playStatus;
+                updatePlayBtn();
                 break;
             case R.id.screen_btn:
 
@@ -103,7 +97,7 @@ public class JackVideoController extends AJackVideoPlayer implements View.OnClic
             // 正在播放
             case IJackVideoPalyer.STATE_PLAYING:
                 playStatus=true;
-
+                updatePlayBtn();
                 startUpdateTimeSeekBar();
                 break;
             // 暂停播放
@@ -125,6 +119,14 @@ public class JackVideoController extends AJackVideoPlayer implements View.OnClic
             case IJackVideoPalyer.STATE_COMPLETED:
                 // 播放完成
                 break;
+        }
+    }
+
+    public void updatePlayBtn(){
+        if(playStatus){
+            open.setImageResource(R.mipmap.play_ing);
+        }else{
+            open.setImageResource(R.mipmap.play_stop);
         }
     }
 
