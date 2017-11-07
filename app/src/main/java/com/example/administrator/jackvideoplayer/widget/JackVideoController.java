@@ -74,6 +74,11 @@ public class JackVideoController extends AJackVideoPlayer implements View.OnClic
             case R.id.play_btn:
                 playStatus=!playStatus;
                 updatePlayBtn();
+                if(playStatus){
+                    iMediaPlayer.restart();
+                }else{
+                    iMediaPlayer.pause();
+                }
                 break;
             case R.id.screen_btn:
 
