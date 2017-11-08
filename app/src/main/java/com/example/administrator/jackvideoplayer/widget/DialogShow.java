@@ -27,7 +27,7 @@ public class DialogShow {
     private static View soundView;
 
     public static void loadingScheduleWindow(Context context,String time){
-        if(scheduleWindow==null&&scheduleView==null){
+        if(scheduleWindow==null){
             scheduleView= LayoutInflater.from(context).inflate(R.layout.dialog_schedule_show,null);
             scheduleWindow=new PopupWindow(scheduleView,ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             scheduleWindow.setFocusable(true);
@@ -42,7 +42,7 @@ public class DialogShow {
     public static void closeScheduleWindow(){
         if(scheduleWindow!=null){
             scheduleWindow.dismiss();
-            scheduleView=null;
+            scheduleWindow=null;
         }
     }
 
