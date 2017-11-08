@@ -13,10 +13,4 @@
         android:layout_height="220dp">
     </com.example.administrator.jackvideoplayer.widget.JackVideoPlayer>
 
-    <com.example.administrator.jackvideoplayer.widget.TestView
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_marginTop="10dp"
-        android:background="@color/colorPrimary"/>
-
 </LinearLayout>

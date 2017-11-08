@@ -150,7 +150,7 @@ public class JackVideoController extends AJackVideoPlayer implements View.OnClic
 
     @Override
     protected void showChangePosition(long duration, int newPositionProgress) {
-
+        Log.e("showChangePosition",duration+"-"+newPositionProgress);
     }
 
     @Override
@@ -160,7 +160,7 @@ public class JackVideoController extends AJackVideoPlayer implements View.OnClic
 
     @Override
     protected void showChangeVolume(int newVolumeProgress) {
-
+        Log.e("showChangeVolume",newVolumeProgress+"");
     }
 
     @Override
@@ -170,12 +170,13 @@ public class JackVideoController extends AJackVideoPlayer implements View.OnClic
 
     @Override
     protected void showChangeBrightness(int newBrightnessProgress) {
-
+        Log.e("showChangeBrightness",newBrightnessProgress+"");
     }
 
     @Override
     protected void hideChangeBrightness() {
 
     }
+
 
 }

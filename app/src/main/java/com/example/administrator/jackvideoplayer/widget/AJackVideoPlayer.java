@@ -106,9 +106,9 @@ public abstract class AJackVideoPlayer extends FrameLayout implements View.OnTou
                     mNewPosition=Math.max(0,Math.min(duration,toPosition));
                     int newPositionProgress=(int) (100f*mNewPosition/duration);
                     showChangePosition(duration,newPositionProgress);
+                    return true;
                 }
                 if(mNeedChangeBrightness){
-                    Log.e("ACTION_MOVE","THERSHOLD2");
                     deltaY=-deltaY;
                     float detlaBrightness=deltaY*3/getHeight();
                     float newBrightness=mGestureDownBrightness+detlaBrightness;
@@ -119,9 +119,10 @@ public abstract class AJackVideoPlayer extends FrameLayout implements View.OnTou
                     VideoViewUtil.scanForActivity(context).getWindow().setAttributes(params);
                     int newBrightnessProgress=(int)(100f*newBrightnessPercentage);
                     showChangeBrightness(newBrightnessProgress);
+
+                    return true;
                 }
                 if(mNeedChangeVolume){
-                    Log.e("ACTION_MOVE","THERSHOLD3");
                     deltaY=-deltaY;
                     int maxVolume=iMediaPlayer.getMaxVolume();
                     int deltaVolume=(int)(maxVolume*deltaY*3/getHeight());
@@ -130,6 +131,8 @@ public abstract class AJackVideoPlayer extends FrameLayout implements View.OnTou
                     iMediaPlayer.setVolume(newVolume);
                     int newVolumeProgress=(int)(100f*newVolume/maxVolume);
                     showChangeVolume(newVolumeProgress);
+
+                    return true;
                 }
                 break;
             case MotionEvent.ACTION_CANCEL:
@@ -150,7 +153,7 @@ public abstract class AJackVideoPlayer extends FrameLayout implements View.OnTou
                 }
                 break;
         }
-        return false;
+        return true;
     }
 
     public void cancelUpdateTimeSeekBar(){
