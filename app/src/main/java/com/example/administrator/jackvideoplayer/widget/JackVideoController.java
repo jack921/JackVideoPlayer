@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -13,7 +14,6 @@ import com.example.administrator.jackvideoplayer.R;
 /**
  * Created by Administrator on 2017/11/7.
  */
-
 public class JackVideoController extends AJackVideoPlayer implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
     private Context context;
     private View mRoot;
@@ -112,7 +112,7 @@ public class JackVideoController extends AJackVideoPlayer implements View.OnClic
                 break;
             // 暂停播放
             case IJackVideoPalyer.STATE_PAUSED:
-
+                open.setImageResource(R.mipmap.play_stop);
                 break;
             // 正在缓冲(播放器正在播放时，缓冲区数据不足，进行缓冲，缓冲区数据足够后恢复播放)
             case IJackVideoPalyer.STATE_BUFFERING_PLAYING:
@@ -151,6 +151,5 @@ public class JackVideoController extends AJackVideoPlayer implements View.OnClic
         iMediaPlayer.seekTo(position);
         startUpdateTimeSeekBar();
     }
-
 
 }
