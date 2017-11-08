@@ -48,7 +48,6 @@ public class JackVideoController extends AJackVideoPlayer implements View.OnClic
         open.setOnClickListener(this);
         seekBar.setOnSeekBarChangeListener(this);
         screen.setOnClickListener(this);
-
     }
 
     public void setVideoView(JackVideoPlayer iMediaPlayer){
@@ -81,7 +80,12 @@ public class JackVideoController extends AJackVideoPlayer implements View.OnClic
                 }
                 break;
             case R.id.screen_btn:
-
+                if(screenStatus){
+                    iMediaPlayer.enterFullScreen();
+                }else{
+                    iMediaPlayer.exitFullScreen();
+                }
+                screenStatus=!screenStatus;
                 break;
         }
     }
@@ -94,6 +98,7 @@ public class JackVideoController extends AJackVideoPlayer implements View.OnClic
                 break;
             // 播放准备中
             case IJackVideoPalyer.STATE_PREPARING:
+
                 break;
             // STATE_PREPARED
             case IJackVideoPalyer.STATE_PREPARED:
@@ -122,7 +127,8 @@ public class JackVideoController extends AJackVideoPlayer implements View.OnClic
 
                 break;
             case IJackVideoPalyer.STATE_COMPLETED:
-                // 播放完成
+            // 播放完成
+
                 break;
         }
     }
@@ -142,7 +148,6 @@ public class JackVideoController extends AJackVideoPlayer implements View.OnClic
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
         long position = (long)(iMediaPlayer.getDuration() * seekBar.getProgress() / 100f);
-        Log.e("psoition", position+"");
         iMediaPlayer.seekTo(position);
         startUpdateTimeSeekBar();
     }

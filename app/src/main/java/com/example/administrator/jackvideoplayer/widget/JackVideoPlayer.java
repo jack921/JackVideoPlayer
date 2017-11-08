@@ -2,10 +2,12 @@ package com.example.administrator.jackvideoplayer.widget;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.SurfaceTexture;
 import android.media.AudioManager;
 import android.net.Uri;
+import android.text.Layout;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
@@ -128,7 +130,7 @@ public class JackVideoPlayer extends FrameLayout implements IJackVideoPalyer,
         this.jackVideoController=jackVideoController;
         jackVideoController.setVideoView(this);
         LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        addView(jackVideoController,params);
+        mContainer.addView(jackVideoController,params);
     }
 
     public void openMediaPlayer(){
@@ -319,11 +321,35 @@ public class JackVideoPlayer extends FrameLayout implements IJackVideoPalyer,
 
     @Override
     public void enterFullScreen() {
+        if(mCurrentState==MODE_FULL_SCREEN){
+            return;
+        }
+        VideoViewUtil.hideActionBar(context);
+        VideoViewUtil.scanForActivity(context).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
+        ViewGroup contentView=VideoViewUtil.scanForActivity(context).findViewById(android.R.id.content);
+        this.removeView(mContainer);
+
+        LayoutParams params=new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        contentView.addView(mContainer,params);
+
+        mCurrentState=MODE_FULL_SCREEN;
     }
 
     @Override
     public boolean exitFullScreen() {
+        if(mCurrentState==MODE_FULL_SCREEN){
+            VideoViewUtil.showActionBar(context);
+            VideoViewUtil.scanForActivity(context).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            ViewGroup contentView=(ViewGroup)VideoViewUtil.scanForActivity(context).findViewById(android.R.id.content);
+
+            contentView.removeView(mContainer);
+            ViewGroup.LayoutParams params=new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            this.addView(mContainer,params);
+
+            mCurrentState=MODE_NORMAL;
+            jackVideoController.udpateControllState(mCurrentState);
+        }
         return false;
     }
 
