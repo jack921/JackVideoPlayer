@@ -326,13 +326,10 @@ public class JackVideoPlayer extends FrameLayout implements IJackVideoPalyer,
         }
         VideoViewUtil.hideActionBar(context);
         VideoViewUtil.scanForActivity(context).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-
         ViewGroup contentView=VideoViewUtil.scanForActivity(context).findViewById(android.R.id.content);
         this.removeView(mContainer);
-
         LayoutParams params=new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         contentView.addView(mContainer,params);
-
         mCurrentState=MODE_FULL_SCREEN;
     }
 
@@ -342,11 +339,9 @@ public class JackVideoPlayer extends FrameLayout implements IJackVideoPalyer,
             VideoViewUtil.showActionBar(context);
             VideoViewUtil.scanForActivity(context).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             ViewGroup contentView=(ViewGroup)VideoViewUtil.scanForActivity(context).findViewById(android.R.id.content);
-
             contentView.removeView(mContainer);
             ViewGroup.LayoutParams params=new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             this.addView(mContainer,params);
-
             mCurrentState=MODE_NORMAL;
             jackVideoController.udpateControllState(mCurrentState);
         }

@@ -15,16 +15,12 @@ import com.example.administrator.jackvideoplayer.R;
  * Created by Administrator on 2017/11/7.
  */
 public class JackVideoController extends AJackVideoPlayer implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
-    private Context context;
-    private View mRoot;
-
     private TextView title;
     private SeekBar seekBar;
     private ImageView open;
     private ImageView screen;
     private TextView mTimeAll;
     private TextView mTimeImg;
-    private JackVideoPlayer iMediaPlayer;
     private boolean playStatus=true;
     private boolean screenStatus=true;
 
@@ -150,6 +146,36 @@ public class JackVideoController extends AJackVideoPlayer implements View.OnClic
         long position = (long)(iMediaPlayer.getDuration() * seekBar.getProgress() / 100f);
         iMediaPlayer.seekTo(position);
         startUpdateTimeSeekBar();
+    }
+
+    @Override
+    protected void showChangePosition(long duration, int newPositionProgress) {
+
+    }
+
+    @Override
+    protected void hideChangePosition() {
+
+    }
+
+    @Override
+    protected void showChangeVolume(int newVolumeProgress) {
+
+    }
+
+    @Override
+    protected void hideChangeVolume() {
+
+    }
+
+    @Override
+    protected void showChangeBrightness(int newBrightnessProgress) {
+
+    }
+
+    @Override
+    protected void hideChangeBrightness() {
+
     }
 
 }
