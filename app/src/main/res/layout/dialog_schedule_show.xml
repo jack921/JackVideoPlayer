@@ -4,6 +4,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <RelativeLayout
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/dialog_drawable_bg">
+
+        <ProgressBar
+            android:id="@+id/progressbar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="15dp"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:id="@+id/progressbar_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/progressbar"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:textSize="18sp"
+            android:text="10:30"/>
+
+    </RelativeLayout>
 
 
 </RelativeLayout>

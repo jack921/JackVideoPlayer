@@ -151,11 +151,12 @@ public class JackVideoController extends AJackVideoPlayer implements View.OnClic
     @Override
     protected void showChangePosition(long duration, int newPositionProgress) {
         Log.e("showChangePosition",duration+"-"+newPositionProgress);
+        DialogShow.loadingScheduleWindow(context,newPositionProgress+"");
     }
 
     @Override
     protected void hideChangePosition() {
-
+        DialogShow.closeScheduleWindow();
     }
 
     @Override
