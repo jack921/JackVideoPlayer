@@ -6,7 +6,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import com.example.administrator.jackvideoplayer.R;
@@ -21,6 +23,8 @@ public class JackVideoController extends AJackVideoPlayer implements View.OnClic
     private ImageView screen;
     private TextView mTimeAll;
     private TextView mTimeImg;
+    private RelativeLayout timeProgress;
+    private RelativeLayout controllerView;
     private boolean playStatus=true;
     private boolean screenStatus=true;
 
@@ -40,6 +44,8 @@ public class JackVideoController extends AJackVideoPlayer implements View.OnClic
         screen=(ImageView)findViewById(R.id.screen_btn);
         mTimeAll=(TextView)findViewById(R.id.time_all);
         mTimeImg=(TextView)findViewById(R.id.time_img);
+        timeProgress=(RelativeLayout)findViewById(R.id.time_progress);
+        controllerView=(RelativeLayout)findViewById(R.id.controller_view);
 
         open.setOnClickListener(this);
         seekBar.setOnSeekBarChangeListener(this);
@@ -150,34 +156,50 @@ public class JackVideoController extends AJackVideoPlayer implements View.OnClic
 
     @Override
     protected void showChangePosition(long duration, int newPositionProgress) {
-        Log.e("showChangePosition",duration+"-"+newPositionProgress);
-        DialogShow.loadingScheduleWindow(context,newPositionProgress+"");
+        if(timeProgress.getVisibility()==View.GONE){
+            timeProgress.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
     protected void hideChangePosition() {
-        DialogShow.closeScheduleWindow();
+        if(timeProgress.getVisibility()==View.VISIBLE){
+            timeProgress.setVisibility(View.GONE);
+        }
     }
 
     @Override
     protected void showChangeVolume(int newVolumeProgress) {
-        Log.e("showChangeVolume",newVolumeProgress+"");
+        showControllView(R.mipmap.ic_sound,newVolumeProgress+"");
     }
 
     @Override
     protected void hideChangeVolume() {
-
+        hideControllView();
     }
 
     @Override
     protected void showChangeBrightness(int newBrightnessProgress) {
-        Log.e("showChangeBrightness",newBrightnessProgress+"");
+        showControllView(R.mipmap.ic_brightness,newBrightnessProgress+"");
     }
 
     @Override
     protected void hideChangeBrightness() {
-
+        hideControllView();
     }
 
+    public void showControllView(int drawable,String data){
+        if(controllerView.getVisibility()==View.GONE){
+            controllerView.setVisibility(View.VISIBLE);
+            ((TextView)controllerView.findViewById(R.id.sound_data)).setText(data);
+            ((ImageView)controllerView.findViewById(R.id.ic_tip_img)).setImageResource(drawable);
+        }
+    }
+
+    public void hideControllView(){
+        if(controllerView.getVisibility()==View.VISIBLE){
+            controllerView.setVisibility(View.GONE);
+        }
+    }
 
 }

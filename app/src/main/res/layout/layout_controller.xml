@@ -87,6 +87,64 @@
 
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/time_progress"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/dialog_drawable_bg"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:id="@+id/progressbar"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_marginTop="10dp"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:id="@+id/progressbar_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/progressbar"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:textColor="#ffffff"
+            android:textSize="18sp"
+            android:text="10:30"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/controller_view"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/dialog_drawable_bg"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/ic_tip_img"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:src="@mipmap/ic_sound"/>
+
+        <TextView
+            android:id="@+id/sound_data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ic_tip_img"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:textColor="#ffffff"
+            android:textSize="18sp"
+            android:text="10:30"/>
+
+    </RelativeLayout>
+
+
 
 </RelativeLayout>
 
