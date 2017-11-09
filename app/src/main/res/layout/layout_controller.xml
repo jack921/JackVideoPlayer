@@ -5,6 +5,7 @@
     android:layout_height="match_parent">
 
     <RelativeLayout
+        android:id="@+id/controller_top_view"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:background="@drawable/top_background">
@@ -21,6 +22,7 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/controller_bottom_view"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_alignParentBottom="true"

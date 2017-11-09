@@ -1,16 +1,16 @@
 package com.example.administrator.jackvideoplayer.widget;
 
 import android.content.Context;
+import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.example.administrator.jackvideoplayer.R;
 
 /**
@@ -25,6 +25,8 @@ public class JackVideoController extends AJackVideoPlayer implements View.OnClic
     private TextView mTimeImg;
     private RelativeLayout timeProgress;
     private RelativeLayout controllerView;
+    private RelativeLayout controllerBottomView;
+    private RelativeLayout controllerTopView;
     private boolean playStatus=true;
     private boolean screenStatus=true;
 
@@ -46,10 +48,12 @@ public class JackVideoController extends AJackVideoPlayer implements View.OnClic
         mTimeImg=(TextView)findViewById(R.id.time_img);
         timeProgress=(RelativeLayout)findViewById(R.id.time_progress);
         controllerView=(RelativeLayout)findViewById(R.id.controller_view);
-
+        controllerBottomView=(RelativeLayout)findViewById(R.id.controller_bottom_view);
+        controllerTopView=(RelativeLayout)findViewById(R.id.controller_top_view);
         open.setOnClickListener(this);
         seekBar.setOnSeekBarChangeListener(this);
         screen.setOnClickListener(this);
+        mRoot.setOnClickListener(this);
     }
 
     public void setVideoView(JackVideoPlayer iMediaPlayer){
@@ -89,6 +93,10 @@ public class JackVideoController extends AJackVideoPlayer implements View.OnClic
                 }
                 screenStatus=!screenStatus;
                 break;
+            default:
+              controllerStatus=!controllerStatus;
+              onTouchUpdate();
+              break;
         }
     }
 
@@ -111,6 +119,14 @@ public class JackVideoController extends AJackVideoPlayer implements View.OnClic
                 playStatus=true;
                 updatePlayBtn();
                 startUpdateTimeSeekBar();
+//                new Handler().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        controllerBottomView.setVisibility(View.GONE);
+//                        controllerTopView.setVisibility(View.GONE);
+//                        controllerStatus=false;
+//                    }
+//                },2000);
                 break;
             // 暂停播放
             case IJackVideoPalyer.STATE_PAUSED:
@@ -131,6 +147,34 @@ public class JackVideoController extends AJackVideoPlayer implements View.OnClic
             case IJackVideoPalyer.STATE_COMPLETED:
             // 播放完成
 
+                break;
+        }
+    }
+
+    @Override
+    public void onTouchUpdate() {
+        if(controllerStatus==true){
+            controllerBottomView.setVisibility(View.VISIBLE);
+            controllerTopView.setVisibility(View.VISIBLE);
+        }else{
+            controllerBottomView.setVisibility(View.GONE);
+            controllerTopView.setVisibility(View.GONE);
+        }
+    }
+
+    public void updateControllerModel(int model){
+        switch(model){
+            case IJackVideoPalyer.MODE_NORMAL:
+
+                break;
+            case IJackVideoPalyer.MODE_FULL_SCREEN:
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        controllerBottomView.setVisibility(View.GONE);
+                        controllerTopView.setVisibility(View.GONE);
+                    }
+                },2000);
                 break;
         }
     }
@@ -200,6 +244,13 @@ public class JackVideoController extends AJackVideoPlayer implements View.OnClic
         if(controllerView.getVisibility()==View.VISIBLE){
             controllerView.setVisibility(View.GONE);
         }
+    }
+
+    public void reset(){
+        playStatus=true;
+        screenStatus=true;
+        open.setImageResource(R.mipmap.play_stop);
+        seekBar.setProgress(0);
     }
 
 }

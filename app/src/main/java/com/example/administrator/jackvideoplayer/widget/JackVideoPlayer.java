@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.graphics.SurfaceTexture;
 import android.media.AudioManager;
 import android.net.Uri;
-import android.text.Layout;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
@@ -16,17 +15,14 @@ import android.view.TextureView;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.Toast;
-
 import java.io.IOException;
 import java.util.Map;
-
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
 /**
  * Created by Administrator on 2017/11/7.
  */
-
 public class JackVideoPlayer extends FrameLayout implements IJackVideoPalyer,
         IMediaPlayer.OnPreparedListener, IMediaPlayer.OnVideoSizeChangedListener,
         IMediaPlayer.OnCompletionListener, IMediaPlayer.OnErrorListener,
@@ -36,10 +32,12 @@ public class JackVideoPlayer extends FrameLayout implements IJackVideoPalyer,
     private FrameLayout mContainer;
     private IMediaPlayer mMediaPlayer;
     private int mCurrentState = STATE_IDLE;
+    private int mCurrentMode=MODE_NORMAL;
     private JackVideoController jackVideoController;
     private SurfaceTexture mSurfaceTexture;
     private AudioManager mAudioManager;
     private TextureView textureView;
+    private int mBufferPercentage;
     private Surface surface;
     private Context context;
     private String uri;
@@ -311,17 +309,23 @@ public class JackVideoPlayer extends FrameLayout implements IJackVideoPalyer,
 
     @Override
     public float getSpeed(float speed) {
+        if (mMediaPlayer instanceof IjkMediaPlayer) {
+            return ((IjkMediaPlayer) mMediaPlayer).getSpeed(speed);
+        }
         return 0;
     }
 
     @Override
     public long getTcpSpeed() {
+        if (mMediaPlayer instanceof IjkMediaPlayer) {
+            return ((IjkMediaPlayer) mMediaPlayer).getTcpSpeed();
+        }
         return 0;
     }
 
     @Override
     public void enterFullScreen() {
-        if(mCurrentState==MODE_FULL_SCREEN){
+        if(mCurrentMode==MODE_FULL_SCREEN){
             return;
         }
         VideoViewUtil.hideActionBar(context);
@@ -330,32 +334,55 @@ public class JackVideoPlayer extends FrameLayout implements IJackVideoPalyer,
         this.removeView(mContainer);
         LayoutParams params=new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         contentView.addView(mContainer,params);
-        mCurrentState=MODE_FULL_SCREEN;
+        mCurrentMode=MODE_FULL_SCREEN;
+        jackVideoController.updateControllerModel(mCurrentMode);
     }
 
     @Override
     public boolean exitFullScreen() {
-        if(mCurrentState==MODE_FULL_SCREEN){
+        if(mCurrentMode==MODE_FULL_SCREEN){
             VideoViewUtil.showActionBar(context);
             VideoViewUtil.scanForActivity(context).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-            ViewGroup contentView=(ViewGroup)VideoViewUtil.scanForActivity(context).findViewById(android.R.id.content);
+            ViewGroup contentView=VideoViewUtil.scanForActivity(context).findViewById(android.R.id.content);
             contentView.removeView(mContainer);
             ViewGroup.LayoutParams params=new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             this.addView(mContainer,params);
-            mCurrentState=MODE_NORMAL;
-            jackVideoController.udpateControllState(mCurrentState);
+            mCurrentMode=MODE_NORMAL;
+            jackVideoController.updateControllerModel(mCurrentState);
         }
         return false;
     }
 
     @Override
     public void releasePlayer() {
-
+        if(mAudioManager!=null){
+            mAudioManager.abandonAudioFocus(null);
+            mAudioManager=null;
+        }
+        if(mMediaPlayer!=null){
+            mMediaPlayer.release();
+            mMediaPlayer=null;
+        }
+        mContainer.removeView(textureView);
+        if(mSurfaceTexture!=null){
+            mSurfaceTexture.release();
+            mSurfaceTexture=null;
+        }
+        mCurrentState=STATE_IDLE;
     }
 
     @Override
     public void release() {
-
+        if(isPlaying()||isBufferingPlaying()||isBufferingPaused()||isPaused()){
+            VideoViewUtil.savePlayPosition(context,uri,getCurrentPosition());
+        }else if(isCompleted()){
+            VideoViewUtil.savePlayPosition(context,uri,0);
+        }
+        releasePlayer();
+        if(jackVideoController!=null){
+            jackVideoController.reset();
+        }
+        Runtime.getRuntime().gc();
     }
 
     //准备回调
@@ -373,7 +400,8 @@ public class JackVideoPlayer extends FrameLayout implements IJackVideoPalyer,
     //完成回调
     @Override
     public void onCompletion(IMediaPlayer iMediaPlayer) {
-
+        mCurrentState=IJackVideoPalyer.STATE_COMPLETED;
+        jackVideoController.udpateControllState(mCurrentState);
     }
 
     //报错回调
@@ -428,8 +456,8 @@ public class JackVideoPlayer extends FrameLayout implements IJackVideoPalyer,
 
     //缓存对调
     @Override
-    public void onBufferingUpdate(IMediaPlayer iMediaPlayer, int i) {
-
+    public void onBufferingUpdate(IMediaPlayer iMediaPlayer, int percent) {
+        mBufferPercentage = percent;
     }
 
     @Override

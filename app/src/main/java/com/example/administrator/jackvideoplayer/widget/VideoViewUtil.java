@@ -87,5 +87,11 @@ public class VideoViewUtil {
         return null;
     }
 
+    public static void savePlayPosition(Context context,String url,long position){
+        context.getSharedPreferences("NICE_VIDEO_PALYER_PLAY_POSITION",Context.MODE_PRIVATE)
+                .edit()
+                .putLong(url,position)
+                .apply();
+    }
 
 }

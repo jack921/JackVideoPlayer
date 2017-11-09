@@ -16,12 +16,12 @@ import java.util.TimerTask;
  * Created by Administrator on 2017/11/7.
  */
 
-public abstract class AJackVideoPlayer extends FrameLayout implements View.OnTouchListener {
+public abstract class AJackVideoPlayer extends FrameLayout implements  View.OnClickListener, View.OnTouchListener {
     public AudioManager mAudioManager;
     public Timer updateSeekbatTimer;
     public TimerTask updateSeekbatTimerTask;
     public JackVideoPlayer iMediaPlayer;
-
+    public boolean controllerStatus=true;
     public Context context;
     public View mRoot;
 
@@ -69,7 +69,6 @@ public abstract class AJackVideoPlayer extends FrameLayout implements View.OnTou
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        Log.e("onTouch",event.getX()+"");
         float x=event.getX();
         float y=event.getY();
         switch(event.getAction()){
@@ -166,6 +165,8 @@ public abstract class AJackVideoPlayer extends FrameLayout implements View.OnTou
             updateSeekbatTimerTask=null;
         }
     }
+
+    public abstract void onTouchUpdate();
 
     /**
      * 手势左右滑动改变播放位置时，显示控制器中间的播放位置变化视图，
