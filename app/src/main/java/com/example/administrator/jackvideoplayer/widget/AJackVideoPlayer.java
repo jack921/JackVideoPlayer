@@ -25,7 +25,7 @@ public abstract class AJackVideoPlayer extends FrameLayout implements  View.OnCl
     public Context context;
     public View mRoot;
 
-    private static final int THERSHOLD=80;
+    private static final int THERSHOLD=60;
     private boolean mNeedChangePosition;
     private boolean mNeedChangeVolume;
     private boolean mNeedChangeBrightness;
@@ -71,6 +71,7 @@ public abstract class AJackVideoPlayer extends FrameLayout implements  View.OnCl
     public boolean onTouch(View v, MotionEvent event) {
         float x=event.getX();
         float y=event.getY();
+
         switch(event.getAction()){
             case MotionEvent.ACTION_DOWN:
                 mDownX=x;
@@ -84,6 +85,7 @@ public abstract class AJackVideoPlayer extends FrameLayout implements  View.OnCl
                 float deltaY=y-mDownY;
                 float absDeltaX=Math.abs(deltaX);
                 float absDeltaY=Math.abs(deltaY);
+                Log.e("absDeltaX",absDeltaX+"");
                 if(!mNeedChangePosition&&!mNeedChangeVolume&&!mNeedChangeBrightness){
                     if(absDeltaX>=THERSHOLD){
                         cancelUpdateTimeSeekBar();
@@ -118,7 +120,6 @@ public abstract class AJackVideoPlayer extends FrameLayout implements  View.OnCl
                     VideoViewUtil.scanForActivity(context).getWindow().setAttributes(params);
                     int newBrightnessProgress=(int)(100f*newBrightnessPercentage);
                     showChangeBrightness(newBrightnessProgress);
-
                     return true;
                 }
                 if(mNeedChangeVolume){
@@ -130,12 +131,16 @@ public abstract class AJackVideoPlayer extends FrameLayout implements  View.OnCl
                     iMediaPlayer.setVolume(newVolume);
                     int newVolumeProgress=(int)(100f*newVolume/maxVolume);
                     showChangeVolume(newVolumeProgress);
-
                     return true;
                 }
                 break;
             case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:
+                if(!((Math.abs(x-mDownX)>=THERSHOLD)||(Math.abs(y-mDownY)>=THERSHOLD))){
+                    Log.e("MotionEvent",Math.abs(x-mDownX)+"");
+                    controllerStatus=!controllerStatus;
+                    onTouchUpdate();
+                }
                 if(mNeedChangePosition){
                     iMediaPlayer.seekTo(mNewPosition);
                     hideChangePosition();

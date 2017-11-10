@@ -53,7 +53,7 @@ public class JackVideoController extends AJackVideoPlayer implements View.OnClic
         open.setOnClickListener(this);
         seekBar.setOnSeekBarChangeListener(this);
         screen.setOnClickListener(this);
-        mRoot.setOnClickListener(this);
+//        mRoot.setOnClickListener(this);
     }
 
     public void setVideoView(JackVideoPlayer iMediaPlayer){
@@ -94,8 +94,9 @@ public class JackVideoController extends AJackVideoPlayer implements View.OnClic
                 screenStatus=!screenStatus;
                 break;
             default:
-              controllerStatus=!controllerStatus;
-              onTouchUpdate();
+
+//              controllerStatus=!controllerStatus;
+//              onTouchUpdate();
               break;
         }
     }
