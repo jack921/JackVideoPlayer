@@ -3,7 +3,6 @@ package com.example.administrator.jackvideoplayer.widget;
 import android.content.Context;
 import android.media.AudioManager;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -85,7 +84,6 @@ public abstract class AJackVideoPlayer extends FrameLayout implements  View.OnCl
                 float deltaY=y-mDownY;
                 float absDeltaX=Math.abs(deltaX);
                 float absDeltaY=Math.abs(deltaY);
-                Log.e("absDeltaX",absDeltaX+"");
                 if(!mNeedChangePosition&&!mNeedChangeVolume&&!mNeedChangeBrightness){
                     if(absDeltaX>=THERSHOLD){
                         cancelUpdateTimeSeekBar();
@@ -137,7 +135,6 @@ public abstract class AJackVideoPlayer extends FrameLayout implements  View.OnCl
             case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:
                 if(!((Math.abs(x-mDownX)>=THERSHOLD)||(Math.abs(y-mDownY)>=THERSHOLD))){
-                    Log.e("MotionEvent",Math.abs(x-mDownX)+"");
                     controllerStatus=!controllerStatus;
                     onTouchUpdate();
                 }

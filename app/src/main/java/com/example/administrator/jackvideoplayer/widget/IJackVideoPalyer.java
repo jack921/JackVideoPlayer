@@ -54,13 +54,6 @@ public interface IJackVideoPalyer {
     public static final int MODE_FULL_SCREEN = 11;
 
     /**
-     * 设置视频Url，以及headers
-     * @param url     视频地址，可以是本地，也可以是网络视频
-     * @param headers 请求header.
-     */
-    void setUp(String url, Map<String, String> headers);
-
-    /**
      * 开始播放
      */
     void start();

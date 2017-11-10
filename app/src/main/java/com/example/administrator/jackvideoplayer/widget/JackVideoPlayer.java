@@ -146,13 +146,13 @@ public class JackVideoPlayer extends FrameLayout implements IJackVideoPalyer,
     }
 
     @Override
-    public void setUp(String url, Map<String, String> headers) {
-
-    }
-
-    @Override
     public void start() {
-
+        if(uri==null){
+            Toast.makeText(context,"uri不能为空",Toast.LENGTH_SHORT).show();
+            return;
+        }
+        initTexttureView();
+        addTextureView();
     }
 
     @Override
