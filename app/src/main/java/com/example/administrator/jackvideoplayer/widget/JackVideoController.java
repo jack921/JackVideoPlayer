@@ -10,8 +10,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.example.administrator.jackvideoplayer.R;
 
 /**
@@ -33,7 +31,7 @@ public class JackVideoController extends AJackVideoPlayer implements View.OnClic
     private RelativeLayout controllerTopView;
     private boolean playStatus=true;
     private boolean screenStatus=true;
-
+    private int mCurrentState;
     private long duration;
 
     public JackVideoController(@NonNull Context context) {
@@ -45,19 +43,19 @@ public class JackVideoController extends AJackVideoPlayer implements View.OnClic
         this.context=context;
         mRoot= LayoutInflater.from(context).inflate(R.layout.layout_controller,this,false);
         addView(mRoot);
-        scrollData=(TextView)findViewById(R.id.sound_data);
-        tipImage=(ImageView)findViewById(R.id.ic_tip_img);
-        title=(TextView)findViewById(R.id.av_title);
-        open=(ImageView)findViewById(R.id.play_btn);
-        seekBar=(SeekBar)findViewById(R.id.av_seek_bar);
-        screen=(ImageView)findViewById(R.id.screen_btn);
-        mTimeAll=(TextView)findViewById(R.id.time_all);
-        mTimeImg=(TextView)findViewById(R.id.time_img);
-        timeProgress=(RelativeLayout)findViewById(R.id.time_progress);
-        controllerView=(RelativeLayout)findViewById(R.id.controller_view);
-        controllerBottomView=(RelativeLayout)findViewById(R.id.controller_bottom_view);
-        controllerTopView=(RelativeLayout)findViewById(R.id.controller_top_view);
-        progressbarTime=(TextView)findViewById(R.id.progressbar_time);
+        scrollData=findViewById(R.id.sound_data);
+        tipImage=findViewById(R.id.ic_tip_img);
+        title=findViewById(R.id.av_title);
+        open=findViewById(R.id.play_btn);
+        seekBar=findViewById(R.id.av_seek_bar);
+        screen=findViewById(R.id.screen_btn);
+        mTimeAll=findViewById(R.id.time_all);
+        mTimeImg=findViewById(R.id.time_img);
+        timeProgress=findViewById(R.id.time_progress);
+        controllerView=findViewById(R.id.controller_view);
+        controllerBottomView=findViewById(R.id.controller_bottom_view);
+        controllerTopView=findViewById(R.id.controller_top_view);
+        progressbarTime=findViewById(R.id.progressbar_time);
         open.setOnClickListener(this);
         seekBar.setOnSeekBarChangeListener(this);
         screen.setOnClickListener(this);
@@ -90,7 +88,11 @@ public class JackVideoController extends AJackVideoPlayer implements View.OnClic
                 if(playStatus){
                     iMediaPlayer.restart();
                 }else{
-                    iMediaPlayer.pause();
+                    if(mCurrentState==IJackVideoPalyer.STATE_COMPLETED){
+                        iMediaPlayer.restart();
+                    }else{
+                        iMediaPlayer.pause();
+                    }
                 }
                 break;
             case R.id.screen_btn:
@@ -109,6 +111,7 @@ public class JackVideoController extends AJackVideoPlayer implements View.OnClic
     }
 
     public void udpateControllState(int state){
+        this.mCurrentState=state;
         switch(state){
             //播放未开始
             case IJackVideoPalyer.STATE_IDLE:
@@ -154,7 +157,8 @@ public class JackVideoController extends AJackVideoPlayer implements View.OnClic
                 break;
             case IJackVideoPalyer.STATE_COMPLETED:
             // 播放完成
-
+                cancelUpdateTimeSeekBar();
+                open.setImageResource(R.mipmap.play_stop);
                 break;
         }
     }
@@ -211,9 +215,6 @@ public class JackVideoController extends AJackVideoPlayer implements View.OnClic
         if(timeProgress.getVisibility()==View.GONE){
             timeProgress.setVisibility(View.VISIBLE);
         }
-        Log.e("duration1",duration+"");
-        Log.e("duration2",Double.valueOf(newPositionProgress).doubleValue()/100+"");
-
         double data=duration*(Double.valueOf(newPositionProgress).doubleValue()/100);
         progressbarTime.setText(VideoViewUtil.formatTime((long)data));
     }

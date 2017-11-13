@@ -173,8 +173,7 @@ public class JackVideoPlayer extends FrameLayout implements IJackVideoPalyer,
             jackVideoController.udpateControllState(mCurrentState);
         }else if(mCurrentState==STATE_COMPLETED||mCurrentState==STATE_ERROR){
             mMediaPlayer.reset();
-            initTexttureView();
-            addTextureView();
+            openMediaPlayer();
         }else{
             Log.e(TAG,"retart error");
         }
