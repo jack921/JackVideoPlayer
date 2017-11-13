@@ -1,11 +1,9 @@
 package com.example.administrator.jackvideoplayer.widget;
 
-import java.util.Map;
 
 /**
  * Created by Administrator on 2017/11/7.
  */
-
 public interface IJackVideoPalyer {
 
     /**

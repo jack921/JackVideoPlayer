@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 import java.io.IOException;
-import java.util.Map;
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
@@ -26,7 +25,8 @@ import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 public class JackVideoPlayer extends FrameLayout implements IJackVideoPalyer,
         IMediaPlayer.OnPreparedListener, IMediaPlayer.OnVideoSizeChangedListener,
         IMediaPlayer.OnCompletionListener, IMediaPlayer.OnErrorListener,
-        IMediaPlayer.OnInfoListener, IMediaPlayer.OnBufferingUpdateListener, TextureView.SurfaceTextureListener {
+        IMediaPlayer.OnInfoListener, IMediaPlayer.OnBufferingUpdateListener,
+        TextureView.SurfaceTextureListener {
     public final String TAG="jack";
 
     private FrameLayout mContainer;
@@ -72,9 +72,10 @@ public class JackVideoPlayer extends FrameLayout implements IJackVideoPalyer,
     }
 
     public void initAudioManager(){
-        if (context instanceof Activity) {
-            ((Activity) context).setVolumeControlStream(AudioManager.STREAM_MUSIC);
-        }
+       if(mAudioManager==null){
+           mAudioManager=(AudioManager)getContext().getSystemService(Context.AUDIO_SERVICE);
+           mAudioManager.requestAudioFocus(null,AudioManager.STREAM_MUSIC,AudioManager.AUDIOFOCUS_GAIN);
+       }
     }
 
     public void initMediaPlayer(){

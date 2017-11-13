@@ -3,6 +3,7 @@ package com.example.administrator.jackvideoplayer.widget;
 import android.content.Context;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -23,12 +24,17 @@ public class JackVideoController extends AJackVideoPlayer implements View.OnClic
     private ImageView screen;
     private TextView mTimeAll;
     private TextView mTimeImg;
+    private TextView scrollData;
+    private ImageView tipImage;
+    private TextView progressbarTime;
     private RelativeLayout timeProgress;
     private RelativeLayout controllerView;
     private RelativeLayout controllerBottomView;
     private RelativeLayout controllerTopView;
     private boolean playStatus=true;
     private boolean screenStatus=true;
+
+    private long duration;
 
     public JackVideoController(@NonNull Context context) {
         super(context);
@@ -39,7 +45,8 @@ public class JackVideoController extends AJackVideoPlayer implements View.OnClic
         this.context=context;
         mRoot= LayoutInflater.from(context).inflate(R.layout.layout_controller,this,false);
         addView(mRoot);
-
+        scrollData=(TextView)findViewById(R.id.sound_data);
+        tipImage=(ImageView)findViewById(R.id.ic_tip_img);
         title=(TextView)findViewById(R.id.av_title);
         open=(ImageView)findViewById(R.id.play_btn);
         seekBar=(SeekBar)findViewById(R.id.av_seek_bar);
@@ -50,6 +57,7 @@ public class JackVideoController extends AJackVideoPlayer implements View.OnClic
         controllerView=(RelativeLayout)findViewById(R.id.controller_view);
         controllerBottomView=(RelativeLayout)findViewById(R.id.controller_bottom_view);
         controllerTopView=(RelativeLayout)findViewById(R.id.controller_top_view);
+        progressbarTime=(TextView)findViewById(R.id.progressbar_time);
         open.setOnClickListener(this);
         seekBar.setOnSeekBarChangeListener(this);
         screen.setOnClickListener(this);
@@ -63,7 +71,7 @@ public class JackVideoController extends AJackVideoPlayer implements View.OnClic
     @Override
     public void updateTimeSeek() {
         long position=iMediaPlayer.getCurrentPosition();
-        long duration=iMediaPlayer.getDuration();
+        duration=iMediaPlayer.getDuration();
         long bufferPercentage=iMediaPlayer.getCurrentPosition();
         seekBar.setSecondaryProgress((int)bufferPercentage);
         int progress=(int) (100f*position/duration);
@@ -94,7 +102,6 @@ public class JackVideoController extends AJackVideoPlayer implements View.OnClic
                 screenStatus=!screenStatus;
                 break;
             default:
-
 //              controllerStatus=!controllerStatus;
 //              onTouchUpdate();
               break;
@@ -204,6 +211,11 @@ public class JackVideoController extends AJackVideoPlayer implements View.OnClic
         if(timeProgress.getVisibility()==View.GONE){
             timeProgress.setVisibility(View.VISIBLE);
         }
+        Log.e("duration1",duration+"");
+        Log.e("duration2",Double.valueOf(newPositionProgress).doubleValue()/100+"");
+
+        double data=duration*(Double.valueOf(newPositionProgress).doubleValue()/100);
+        progressbarTime.setText(VideoViewUtil.formatTime((long)data));
     }
 
     @Override
@@ -234,11 +246,12 @@ public class JackVideoController extends AJackVideoPlayer implements View.OnClic
     }
 
     public void showControllView(int drawable,String data){
+        Log.e("data",data+"");
         if(controllerView.getVisibility()==View.GONE){
             controllerView.setVisibility(View.VISIBLE);
-            ((TextView)controllerView.findViewById(R.id.sound_data)).setText(data);
-            ((ImageView)controllerView.findViewById(R.id.ic_tip_img)).setImageResource(drawable);
+            tipImage.setImageResource(drawable);
         }
+        scrollData.setText(data);
     }
 
     public void hideControllView(){
